@@ -3,18 +3,52 @@ package com.amin;
 import java.io.*;
 import java.util.*;
 
+/**
+ * The type Magpie 2.
+ */
 public class Magpie2 {
+	/**
+	 * The Keywords.
+	 */
 	private Map<Integer, String> keywords;
+	/**
+	 * The Responses.
+	 */
 	private Map<Integer, String> responses;
+	/**
+	 * The Input.
+	 */
 	private Scanner input;
+	/**
+	 * The Keywords writer.
+	 */
 	private BufferedWriter keywordsWriter;
+	/**
+	 * The Responses writer.
+	 */
 	private BufferedWriter responsesWriter;
 
+	/**
+	 * Instantiates a new Magpie 2.
+	 *
+	 * @param input the input
+	 */
 	public Magpie2(Scanner input) {
 		this.input = input;
 		init();
 	}
 
+	/**
+	 * Instantiates a new Magpie 2.
+	 */
+	public Magpie2() {
+		this.input = new Scanner(System.in);
+		init();
+	}
+
+	/**
+	 * Init.
+	 */
 	private void init() {
 		this.keywords = new HashMap<>();
 		this.responses = new HashMap<>();
@@ -48,10 +82,21 @@ public class Magpie2 {
 		} catch (IOException ignored) {}
 	}
 
+	/**
+	 * Gets greeting.
+	 *
+	 * @return the greeting
+	 */
 	public String getGreeting() {
 		return "Hello, let's talk.";
 	}
 
+	/**
+	 * Gets response.
+	 *
+	 * @param statement the statement
+	 * @return the response
+	 */
 	public String getResponse(String statement) {
 		String response = "continue...";
 
@@ -119,6 +164,12 @@ public class Magpie2 {
 		return response;
 	}
 
+	/**
+	 * Add keyword.
+	 *
+	 * @param statement the statement
+	 * @throws IOException the io exception
+	 */
 	private void addKeyword(String statement) throws IOException {
 		String newKeyword = detectKeyword(statement);
 		System.out.printf("New Keyword: %s; What should the response be? (type no to cancel): ", newKeyword);
@@ -142,6 +193,12 @@ public class Magpie2 {
 		System.out.println();
 	}
 
+	/**
+	 * Detect keyword string.
+	 *
+	 * @param statement the statement
+	 * @return the string
+	 */
 	private String detectKeyword(String statement) {
 		/*
 		THIS DETECTS A RANDOM WORD: FOR NOW I AM JUST GOING TO USE WHOLE STATEMENT AS KEYWORD
@@ -152,17 +209,12 @@ public class Magpie2 {
 	}
 
 	/**
-	 * Search for one word in phrase. The search is not case
-	 * sensitive. This method will check that the given goal
-	 * is not a substring of a longer string (so, for
-	 * example, "I know" does not contain "no").
+	 * Find keyword int.
 	 *
-	 * @param statement the string to search
-	 * @param goal      the string to search for
-	 * @param startPos  the character of the string to begin the
-	 *                  search at
-	 * @return the index of the first occurrence of goal in
-	 * statement or -1 if it's not found
+	 * @param statement the statement
+	 * @param goal      the goal
+	 * @param startPos  the start pos
+	 * @return the int
 	 */
 	private int findKeyword(String statement, String goal, int startPos) {
 		String phrase = statement.trim().toLowerCase();
