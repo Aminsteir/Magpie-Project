@@ -12,7 +12,7 @@ or
 > private List<Pair<Integer, String>> keywords; 
 > private List<Pair<Integer, String>> responses;
 
-This project implements both HashMap and ArrayLists (both on separate branches)
+This project implements both HashMap and Lists (both on separate branches) --> HashMap is on the Using-Maps branch and the Lists is on the master branch
 
 Why Use HashMap: the map interface includes both a key and a value, which makes it easier to locate and access values from the files
 
