@@ -22,3 +22,7 @@
 23=Oh, I just love that guy!
 24=that's not good enough
 25=awww, that's so sad. Not. Just go buy some shoes!
+26=That is awesome!
+27=Did you mean Hello?
+28=you're it!
+29=don't ask me!

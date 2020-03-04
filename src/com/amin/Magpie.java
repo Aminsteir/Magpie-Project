@@ -1,5 +1,7 @@
 package com.amin;
 
+import javafx.util.Pair;
+
 import java.io.*;
 import java.util.*;
 
@@ -10,11 +12,11 @@ public class Magpie {
 	/**
 	 * The Keywords.
 	 */
-	private Map<Integer, String> keywords;
+	private List<Pair<Integer,String>> keywords;
 	/**
 	 * The Responses.
 	 */
-	private Map<Integer, String> responses;
+	private List<Pair<Integer,String>> responses;
 	/**
 	 * The Input.
 	 */
@@ -50,8 +52,8 @@ public class Magpie {
 	 * Init.
 	 */
 	private void init() {
-		this.keywords = new HashMap<>();
-		this.responses = new HashMap<>();
+		this.keywords = new ArrayList<>();
+		this.responses = new ArrayList<>();
 
 		File keywordsTxt = new File("src/com/amin/keywords.txt");
 		File responsesTxt = new File("src/com/amin/responses.txt");
@@ -61,9 +63,9 @@ public class Magpie {
 			String line = reader.readLine();
 			while (line != null) {
 				String[] arr = line.split("=");
-				int associated = Integer.parseInt(arr[0]);
+				Integer associated = Integer.parseInt(arr[0]);
 				String rest = arr[1];
-				keywords.put(associated, rest);
+				keywords.add(new Pair<>(associated, rest));
 				line = reader.readLine();
 			}
 
@@ -73,7 +75,7 @@ public class Magpie {
 				String[] arr = line.split("=");
 				int associated = Integer.parseInt(arr[0]);
 				String rest = arr[1];
-				responses.put(associated, rest);
+				responses.add(new Pair<>(associated, rest));
 				line = reader.readLine();
 			}
 
@@ -107,7 +109,7 @@ public class Magpie {
 
 		boolean foundKeyword = false;
 
-		for (Map.Entry<Integer, String> entry : keywords.entrySet()) {
+		for (Pair<Integer, String> entry : keywords) {
 			if (foundKeyword)
 				break;
 
@@ -125,7 +127,7 @@ public class Magpie {
 					int secondPartPos = findKeyword(statement, secondPart, firstPartPos);
 					if (firstPartPos >= 0 && secondPartPos >= 0) {
 						String stuffInMiddle = statement.substring(firstPartPos + firstPart.length() + 1, secondPartPos).trim();
-						String tempResponse = responses.get(entry.getKey());
+						String tempResponse = Objects.requireNonNull(getPair(responses, entry.getKey())).getValue();
 						String[] readyResponses = tempResponse.split("\\|");
 						String pickedResponse = readyResponses[new Random().nextInt(readyResponses.length)];
 						try {
@@ -136,7 +138,7 @@ public class Magpie {
 						foundKeyword = true;
 					}
 				} else if (findKeyword(statement, keyword, 0) >= 0) {
-					String tempResponse = responses.get(entry.getKey());
+					String tempResponse = Objects.requireNonNull(getPair(responses, entry.getKey())).getValue();
 
 					// Randomly picks a response among the ready responses
 					String[] responsesReady = tempResponse.split("\\|");
@@ -164,6 +166,25 @@ public class Magpie {
 		return response;
 	}
 
+	private Pair<Integer, String> getPair(List<Pair<Integer, String>> values, int keyValue) {
+		for (Pair<Integer, String> pair: values) {
+			if (pair.getKey() == keyValue) {
+				return pair;
+			}
+		}
+		return null;
+	}
+
+	private int getMaxKey(List<Pair<Integer, String>> values) {
+		int max = values.get(0).getKey();
+		for (Pair<Integer, String> pair: values) {
+			if (pair.getKey() > max) {
+				max = pair.getKey();
+			}
+		}
+		return max;
+	}
+
 	/**
 	 * Add keyword.
 	 *
@@ -178,7 +199,7 @@ public class Magpie {
 		if (response.trim().equalsIgnoreCase("no"))
 			return;
 
-		int id = Collections.max(keywords.keySet()) + 1;
+		int id = getMaxKey(keywords) + 1;
 		keywordsWriter.write(String.format("%s=%s",id, newKeyword));
 		keywordsWriter.newLine();
 		responsesWriter.write(String.format("%s=%s",id, response));
@@ -187,8 +208,11 @@ public class Magpie {
 		keywordsWriter.flush();
 		responsesWriter.flush();
 
-		keywords.put(id, newKeyword);
-		responses.put(id, response);
+		Pair<Integer, String> keyword = new Pair<>(id, newKeyword);
+		Pair<Integer, String> newResponse = new Pair<>(id, response);
+
+		keywords.add(keyword);
+		responses.add(newResponse);
 
 		System.out.println();
 	}
