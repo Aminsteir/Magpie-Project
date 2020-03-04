@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * The type Magpie 2.
  */
-public class Magpie2 {
+public class Magpie {
 	/**
 	 * The Keywords.
 	 */
@@ -33,7 +33,7 @@ public class Magpie2 {
 	 *
 	 * @param input the input
 	 */
-	public Magpie2(Scanner input) {
+	public Magpie(Scanner input) {
 		this.input = input;
 		init();
 	}
@@ -41,7 +41,7 @@ public class Magpie2 {
 	/**
 	 * Instantiates a new Magpie 2.
 	 */
-	public Magpie2() {
+	public Magpie() {
 		this.input = new Scanner(System.in);
 		init();
 	}
